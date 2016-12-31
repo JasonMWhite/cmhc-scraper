@@ -89,7 +89,70 @@ class StatsSpider(scrapy.Spider):
             'dimension_value': {'Row', 'Apartment', 'Row / Apartment'},
             'DefaultDataField': 'universe_unit_cnt',
             'TableId': '2.1.26.6',
-        }
+        },
+        'completions': {
+            'CategoryLevel1': 'New Housing Construction',
+            'CategoryLevel2': 'Completions',
+            'dimension_name': 'intended_markets',
+            'dimension_key': 'dimension-18',
+            'dimension_value': {'Homeowner', 'Rental', 'Condo', 'Co-op', 'All'},
+            'DefaultDataField': 'measure-11',
+            'TableId': '1.1.2.11',
+        },
+        'starts': {
+            'CategoryLevel1': 'New Housing Construction',
+            'CategoryLevel2': 'Starts (Actual)',
+            'dimension_name': 'intended_markets',
+            'dimension_key': 'dimension-18',
+            'dimension_value': {'Homeowner', 'Rental', 'Condo', 'Co-op', 'All'},
+            'DefaultDataField': 'measure-12',
+            'TableId': '1.1.1.11',
+        },
+        'under_construction_inventory': {
+            'CategoryLevel1': 'New Housing Construction',
+            'CategoryLevel2': 'Under Construction Inventory',
+            'dimension_name': 'intended_markets',
+            'dimension_key': 'dimension-18',
+            'dimension_value': {'Homeowner', 'Rental', 'Condo', 'Co-op', 'All'},
+            'DefaultDataField': 'measure-14',
+            'TableId': '1.1.3.11',
+        },
+        'average_length_of_construction': {
+            'CategoryLevel1': 'New Housing Construction',
+            'CategoryLevel2': 'Length of Construction (in months)',
+            'dimension_name': 'intended_markets',
+            'dimension_key': 'dimension-18',
+            'dimension_value': {'Homeowner', 'Rental', 'Condo', 'Co-op', 'All'},
+            'DefaultDataField': 'measure-17',
+            'TableId': '1.1.7.9',
+        },
+        'absorbed_units': {
+            'CategoryLevel1': 'New Housing Construction',
+            'CategoryLevel2': 'Absorbed Units (Homeowner & Condo)',
+            'dimension_name': 'intended_markets',
+            'dimension_key': 'dimension-18',
+            'dimension_value': {'Homeowner', 'Condo', 'All'},
+            'DefaultDataField': 'measure-20',
+            'TableId': '1.1.5.9',
+        },
+        'percent_absorbed_units_at_completion': {
+            'CategoryLevel1': 'New Housing Construction',
+            'CategoryLevel2': '% of Absorbed Units at Completion (Homeowner & Condo)',
+            'dimension_name': 'intended_markets',
+            'dimension_key': 'dimension-18',
+            'dimension_values': {'Homeowner', 'Condo'},
+            'DefaultDataField': 'measure-16',
+            'TableId': '1.1.6.9',
+        },
+        'completed_unabsorbed_units_inventory': {
+            'CategoryLevel1': 'New Housing Construction',
+            'CategoryLevel2': 'Inventory of Completed and Unabsorbed Units (Homeowner & Condo)',
+            'dimension_name': 'intended_markets',
+            'dimension_key': 'dimension-id',
+            'dimension_values': {'Homeowner', 'Condo'},
+            'DefaultDataField': 'measure-15',
+            'TableId': '1.1.4.9',
+        },
     }
 
     def __init__(self, *args, **kwargs):
@@ -127,10 +190,12 @@ class StatsSpider(scrapy.Spider):
         meta['data_type'] = data_type
         meta['met_id'] = met_id
         meta['met_name']= met_name
+        meta['dont_retry'] = True
 
         return scrapy.Request(
             self.DATA_URL + "?" + params,
             callback=self.data_availability,
+            errback=self.data_availability_error,
             headers=self.HEADERS,
             meta=meta,
         )
@@ -152,6 +217,10 @@ class StatsSpider(scrapy.Spider):
         time_periods = json.loads(page.find('input', id="serialized-model")['data-table-model'])
         for availability in time_periods['AvailableTimePeriods']:
             yield (availability['Year'], availability['Month'])
+
+    def data_availability_error(self, failure):
+        meta = failure.request.meta
+        self.logger.debug("Data unavailable for province_code: {}, met_id: {}, data_type: {}".format(meta['province_code'], meta['met_id'], meta['data_type']))
 
     def data_availability(self, response):
         available_periods = self.available_periods(response.body)
