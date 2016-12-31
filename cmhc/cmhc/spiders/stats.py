@@ -48,40 +48,45 @@ class StatsSpider(scrapy.Spider):
         'vacancy_rate': {
             'CategoryLevel1': 'Primary Rental Market',
             'CategoryLevel2': 'Vacancy Rate (%)',
-            'AppliedFilters[0].Key': 'dwelling_type_desc_en',
-            'AppliedFilters[0].Value': 'Row / Apartment',
+            'dimension_name': 'dwelling_type',
+            'dimension_key': 'dwelling_type_desc_en',
+            'dimension_value': {'Row', 'Apartment', 'Row / Apartment'},
             'DefaultDataField': 'vacancy_rate_pct',
             'TableId': '2.1.1.6',
         },
         'availability_rate': {
             'CategoryLevel1': 'Primary Rental Market',
             'CategoryLevel2': 'Availability Rate (%)',
-            'AppliedFilters[0].Key': 'dwelling_type_desc_en',
-            'AppliedFilters[0].Value': 'Row / Apartment',
+            'dimension_name': 'dwelling_type',
+            'dimension_key': 'dwelling_type_desc_en',
+            'dimension_value': {'Row', 'Apartment', 'Row / Apartment'},
             'DefaultDataField': 'availability_rate_pct',
             'TableId': '2.1.6.6',
         },
         'average_rent': {
             'CategoryLevel1': 'Primary Rental Market',
             'CategoryLevel2': 'Average Rent ($)',
-            'AppliedFilters[0].Key': 'dwelling_type_desc_en',
-            'AppliedFilters[0].Value': 'Row / Apartment',
+            'dimension_name': 'dwelling_type',
+            'dimension_key': 'dwelling_type_desc_en',
+            'dimension_value': {'Row', 'Apartment', 'Row / Apartment'},
             'DefaultDataField': 'average_rent_amt',
             'TableId': '2.1.11.6',
         },
         'median_rent': {
             'CategoryLevel1': 'Primary Rental Market',
             'CategoryLevel2': 'Median Rent ($)',
-            'AppliedFilters[0].Key': 'dwelling_type_desc_en',
-            'AppliedFilters[0].Value': 'Row / Apartment',
+            'dimension_name': 'dwelling_type',
+            'dimension_key': 'dwelling_type_desc_en',
+            'dimension_value': {'Row', 'Apartment', 'Row / Apartment'},
             'DefaultDataField': 'rent_median_amt',
             'TableId': '2.1.21.6',
         },
         'rental_universe': {
             'CategoryLevel1': 'Primary Rental Market',
             'CategoryLevel2': 'Rental Universe',
-            'AppliedFilters[0].Key': 'dwelling_type_desc_en',
-            'AppliedFilters[0].Value': 'Row / Apartment',
+            'dimension_name': 'dwelling_type',
+            'dimension_key': 'dwelling_type_desc_en',
+            'dimension_value': {'Row', 'Apartment', 'Row / Apartment'},
             'DefaultDataField': 'universe_unit_cnt',
             'TableId': '2.1.26.6',
         }
@@ -132,13 +137,13 @@ class StatsSpider(scrapy.Spider):
 
     def mets_for_province(self, response):
         data = self.parse_met_data(response.body)
-        meta = {
-            'province': response.meta['province'],
-            'province_code': response.meta['province_code'],
-        }
 
         for (met_id, name) in data:
             for data_type in self.DATA_TYPES:
+                meta = {
+                    'province': response.meta['province'],
+                    'province_code': response.meta['province_code'],
+                }
                 yield self.data_availability_request(met_id, name, data_type, meta)
 
     @staticmethod
@@ -154,8 +159,7 @@ class StatsSpider(scrapy.Spider):
         data_fields = self.DATA_TYPES[data_type]
 
         data = self.DEFAULT_REQUEST_CONTENT.copy()
-        data['AppliedFilters[0].Key'] = data_fields['AppliedFilters[0].Key']
-        data['AppliedFilters[0].Value'] = data_fields['AppliedFilters[0].Value']
+        data['AppliedFilters[0].Key'] = data_fields['dimension_key']
         data['DefaultDataField'] = data_fields['DefaultDataField']
         data['TableId'] = data_fields['TableId']
         data['GeograghyName'] = response.meta['met_name']
@@ -167,39 +171,45 @@ class StatsSpider(scrapy.Spider):
             'met_id': response.meta['met_id'],
             'met_name': response.meta['met_name'],
             'data_type': data_type,
+            'dimension_name': data_fields['dimension_name'],
+            'dimension_key': data_fields['dimension_key'],
         }
 
         for (year, month) in available_periods:
-            data['ForTimePeriod.Month'] = month
-            data['ForTimePeriod.Year'] = year
-            body = parse.urlencode(data)
-            meta['year'] = year
-            meta['month'] = month
+            for dim_value in data_fields['dimension_value']:
+                data['AppliedFilters[0].Value'] = dim_value
+                data['ForTimePeriod.Month'] = month
+                data['ForTimePeriod.Year'] = year
+                body = parse.urlencode(data)
+                meta['year'] = year
+                meta['month'] = month
+                meta['dimension_value'] = dim_value
 
-            yield scrapy.Request(
-                self.EMBEDDED_DATA_URL,
-                body=body,
-                headers=self.HEADERS,
-                callback=self.parse_data,
-                meta=meta,
-            )
+                yield scrapy.Request(
+                    self.EMBEDDED_DATA_URL,
+                    body=body,
+                    headers=self.HEADERS,
+                    callback=self.parse_data,
+                    meta=meta,
+                )
 
     @staticmethod
     def extract_data(body):
         page = BeautifulSoup(body, 'html.parser')
         table = page.find('table', **{'class': 'CawdDataTable'})
-        head = table.find('thead')
-        cols = {node['data-sort-key']: node.text for node in head.find_all('th')}
+        if table:
+            head = table.find('thead')
+            cols = {node['data-sort-key']: node.text for node in head.find_all('th')}
 
-        main = table.find('tbody')
-        rows = main.find_all('tr')
-        for row in rows:
-            data = {value: row.find('td', **{'data-field': key}).text for (key, value) in cols.items()}
-            for key in data:
-                data[key] = None if data[key] == '**' else data[key]
+            main = table.find('tbody')
+            rows = main.find_all('tr')
+            for row in rows:
+                data = {value: row.find('td', **{'data-field': key}).text for (key, value) in cols.items()}
+                for key in data:
+                    data[key] = None if data[key] == '**' else data[key]
 
-            data['name'] = row.find('th').text
-            yield data
+                data['name'] = row.find('th').text
+                yield data
 
     def parse_data(self, response):
         for item in self.extract_data(response.body):
@@ -210,4 +220,6 @@ class StatsSpider(scrapy.Spider):
             item['data_type'] = response.meta['data_type']
             item['year'] = response.meta['year']
             item['month'] = response.meta['month']
+            item['dimension_name'] = response.meta['dimension_name']
+            item['dimension_value'] = response.meta['dimension_value']
             yield item
