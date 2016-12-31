@@ -35,7 +35,7 @@ def test_mets_for_province_callback(mets_by_province):
                   meta={'province': 'Newfoundland and Labrador', 'province_code': 10})
     res = HtmlResponse(url=url, request=req, body=mets_by_province, encoding='utf-8')
     result = spider.mets_for_province(res)
-    result = sorted(result, key=lambda req: (req.url, req.meta['data_type']))
+    result = sorted(result, key=lambda req: (req.meta['met_id'], req.meta['data_type']))
 
     assert len(result) == 25
     assert 'GeographyId=1640' in result[0].url
@@ -124,6 +124,8 @@ def test_parse_data(detailed_data):
         'name': '0003.01',
         'province': 'Newfoundland and Labrador',
         'province_code': 10,
+        'met_name': "St. John's",
+        'met_id': '1640',
         'data_type': 'vacancy_rate',
         'year': 2016,
         'month': 10
