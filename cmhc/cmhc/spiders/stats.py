@@ -20,6 +20,16 @@ class StatsSpider(scrapy.Spider):
     DATA_URL = "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/TableMatchingCriteria"
     EMBEDDED_DATA_URL = "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/RenderTable"
 
+    HEADERS = {
+        'Accept': 'text/html, */*; q=0.01',
+        'Origin': 'https://www03.cmhc-schl.gc.ca',
+        'X-Requested-With': 'XMLHttpRequest',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Accept-Encoding': 'gzip, deflate',
+        'Accept-Language': 'en-US,en;q=0.8',
+    }
+
     def __init__(self, *args, **kwargs):
         logger = logging.getLogger('scrapy.core.scraper')
         logger.setLevel(logging.WARNING)
@@ -29,12 +39,13 @@ class StatsSpider(scrapy.Spider):
         return scrapy.Request(
             self.METS_REQUEST_URL + str(code),
             callback=self.mets_for_province,
+            headers=self.HEADERS,
             meta={'province': province, 'province_code': code}
         )
 
     def start_requests(self):
-        return [self.initial_request(province, code)
-                    for province, code in province_codes().items()]
+        for (province, code) in province_codes().items():
+            yield self.initial_request(province, code)
 
     @staticmethod
     def parse_met_data(body):
@@ -58,6 +69,7 @@ class StatsSpider(scrapy.Spider):
         return scrapy.Request(
             self.DATA_URL + "?" + params,
             callback=self.vacancy_data_availability,
+            headers=self.HEADERS,
             meta=meta,
         )
 
@@ -68,7 +80,8 @@ class StatsSpider(scrapy.Spider):
             'province_code': response.meta['province_code'],
         }
 
-        return [self.vacancy_rate_request(met_id, name, meta) for (met_id, name) in data]
+        for (met_id, name) in data:
+            yield self.vacancy_rate_request(met_id, name, meta)
 
     @staticmethod
     def vacancy_rate_available_periods(body):
@@ -107,17 +120,6 @@ class StatsSpider(scrapy.Spider):
             'data_type': response.meta['data_type'],
         }
 
-        headers = {
-            'Accept': 'text/html, */*; q=0.01',
-            'Origin': 'https://www03.cmhc-schl.gc.ca',
-            'X-Requested-With': 'XMLHttpRequest',
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36',
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'Referer': 'https://www03.cmhc-schl.gc.ca/hmiportal/en/',
-            'Accept-Encoding': 'gzip, deflate',
-            'Accept-Language': 'en-US,en;q=0.8',
-        }
-
         for (year, month) in available_periods:
             data['ForTimePeriod.Month'] = month
             data['ForTimePeriod.Year'] = year
@@ -128,7 +130,7 @@ class StatsSpider(scrapy.Spider):
             yield scrapy.Request(
                 self.EMBEDDED_DATA_URL,
                 body=body,
-                headers=headers,
+                headers=self.HEADERS,
                 callback=self.parse_vacancy_data,
                 meta=meta,
             )
