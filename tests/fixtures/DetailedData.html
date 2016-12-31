@@ -1,0 +1,642 @@
+
+<div id="overlayHeaderDIV">
+        <h1 class="overlayH1 table-title">St. John&#39;s <span class="productTitle">— Vacancy Rates by Bedroom Type by Census Tract </span>
+        <!-- By Dwelling Type By Provinces(In Centres 100, 000+)-->
+    </h1>
+
+    <ul id="overlayInteractOptions">
+            <li><a href="/hmip-pimh/en/TableMapChart/SaveDisabled" id="saveSessionDisabledLink">Save</a></li>
+            <li><a href="/hmip-pimh/en/TableMapChart/SaveDisabled" id="subscribeSessionDisabledLink">Subscribe</a></li>
+
+        <!--like following a post on facebook and emailed with updated -->
+        <li><a href="#" id="exportTableLink">Export</a>
+
+        </li>
+        <li><a href="#" id="printTableLink" class="newWindow">Print <span>(opens in new window)</span></a></li>
+        <li><a href="#" id="shareButton" class="shareButton">Share</a></li>
+        <li><a href="/hmip-pimh/en/Help/TableWidgetHelpOverlay" class = "CAWDHelpLink"><img title="Help" alt="Help" src="/hmip-pimh/Images/icon_interfacehelp.gif" width="14" height="15" /></a></li>
+    </ul>
+</div>
+<div class="table-input" id="exportTableInput">
+    <ul>
+            <li><a href="#csv-export" data-export-type="csv">Export to Spreadsheet (CSV)</a></li>
+        <li><a href="#pdf-export" data-export-type="pdf">Export to PDF</a></li>
+    </ul>
+</div>
+
+<form action="/hmip-pimh/en/TableMapChart/ExportTable" id="exportTableForm" method="post"></form><div id="share-section" class="share-section" data-url="/hmip-pimh/en/Main/SharedContent?tid=L2htaXAtcGltaC9lbi9UYWJsZU1hcENoYXJ0L1RhYmxlP1RhYmxlSWQ9Mi4xLjEuNiZHZW9ncmFwaHlJZD0xNjQwJkdlb2dyYXBoeVR5cGVJZD0zJkJyZWFrZG93bkdlb2dyYXBoeVR5cGVJZD03JkRpc3BsYXlBcz1UYWJsZSZHZW9ncmFnaHlOYW1lPVN0LiUyMEpvaG4ncyZZdGQ9RmFsc2UmRGVmYXVsdERhdGFGaWVsZD12YWNhbmN5X3JhdGVfcGN0JlN1cnZleT1SbXMmRm9yVGltZVBlcmlvZC5ZZWFyPTIwMTYmRm9yVGltZVBlcmlvZC5Nb250aD0xMA%253D%253D">
+    <div id="facebook" data-text="The housing data you want, the way you want it." data-title="Like" data-icon-url="/hmip-pimh/Images/social/facebook.png"></div>
+    <div id="twitter" data-text="The housing data you want, the way you want it." data-title="Tweet" data-icon-url="/hmip-pimh/Images/social/twitter.png"></div>
+    <div id="linkedin" data-text="The housing data you want, the way you want it." data-title="Share" data-icon-url="/hmip-pimh/Images/social/linkedin.png"></div>
+    <div id="googleplus" data-text="The housing data you want, the way you want it." data-title="+1" data-icon-url="/hmip-pimh/Images/social/google-plus.png"></div>
+    <div id="email" data-action-url="/hmip-pimh/en/Main/ShareByEmail"><img src="/hmip-pimh/Images/social/email.png" alt="Email" title="Email" /></div>
+</div>
+
+<style type="text/css">
+    .share-button
+    {
+    }
+
+    .sharrre, #email
+    {
+        display: inline-block;
+    }
+
+    #email {
+        cursor: pointer;
+    }
+</style>
+
+ <div id="saveSession" tabindex="-1" role="dialog" class="overlay-small">
+        <a href="#" id="close-saveSession" class="close-overlay-small">Close <img src="/hmip-pimh/images/iconClose.gif" alt="close" width="15" height="15" /></a>
+        <div id="saveSession-container">
+        </div>
+</div>
+
+<div id="saveDisabled" tabindex="-1" role="dialog" class="overlay-small" style="height:auto">
+    <a href="#" id="close-saveDisabled" class="close-overlay-small">Close
+        <img src="/hmip-pimh/images/iconClose.gif" alt="close" width="15" height="15" /></a>
+    <div id="saveDisabled-container" style="padding-top:10px">You must be logged in to save or subscribe.</div>
+    <div class="saveDisabledOKButtons" id="saveDisabledOK" > <p class="introOverlayTutorialButton" style="float:left"><a>OK</a></p></div>
+</div>
+
+
+
+<div class="table-options popup-filters section-header">
+    <ul class="filters overlay-data-options">
+            <li><a href="#timeperiod" id="timePeriodLink" class="menu-link table-time-period-config ">October 2016</a></li>
+
+
+            <li><a href="#" id="filterBydwelling_type_desc_enLink" class="menu-link">Row / Apartment</a></li>
+
+    </ul>
+    <ul class="display-types overlay-display-options">
+
+            <li><a href="#" id="viewAsChart" class="table-display-link disabled" title="not available">
+        <img src="/hmip-pimh/images/overlay_chart_transparent.gif" width="17" height="17" alt="Chart" title="Chart"> Chart</a></li>
+
+                <li><a href="#" id="viewAsMap" class="table-display-link " title="">
+        <img src="/hmip-pimh/images/overlay_map_transparent.gif" width="17" height="17" alt="Map" title="Map"> Map</a></li>
+
+    </ul>
+</div>
+
+    <div class="view-by-input table-input" id="filterBydwelling_type_desc_enInput" role="dialog" tabindex="-1">
+        <ul>
+                <li><a href="#Row" data-key="dwelling_type_desc_en" data-value="Row">Row</a></li>
+                <li><a href="#Apartment" data-key="dwelling_type_desc_en" data-value="Apartment">Apartment</a></li>
+                <li><a href="#Row / Apartment" data-key="dwelling_type_desc_en" data-value="Row / Apartment">Row / Apartment</a></li>
+                    </ul>
+    </div>
+
+    <div class="view-by-input table-input" id="selectDataFieldInput" role="dialog" tabindex="-1">
+        <ul>
+                <li><a href="#Vacancy Rate (%)" data-key="vacancy_rate_pct" data-value="Vacancy Rate (%)">Vacancy Rate (%)</a></li>
+        </ul>
+    </div>
+
+
+<div class="table-input time-period-input " id="timePeriodInput" role="dialog" tabindex="-1">
+    <h4>Reference Period</h4>
+    <div class="time-period-captions"></div>
+    <div class="time-period" id="forTimePeriod">
+        <a href="#prev-year" class="prev-year">previous</a>
+        <a href="#next-year" class="next-year">next</a>
+
+        <div class="time-period-caption" data-to="TO">
+                <div data-year="1990" data-has-quarterly="false" data-full-year="false" style="display:none">1990</div>
+                <div data-year="1991" data-has-quarterly="false" data-full-year="false" style="display:none">1991</div>
+                <div data-year="1992" data-has-quarterly="false" data-full-year="false" style="display:none">1992</div>
+                <div data-year="1993" data-has-quarterly="false" data-full-year="false" style="display:none">1993</div>
+                <div data-year="1994" data-has-quarterly="false" data-full-year="false" style="display:none">1994</div>
+                <div data-year="1995" data-has-quarterly="false" data-full-year="false" style="display:none">1995</div>
+                <div data-year="1996" data-has-quarterly="false" data-full-year="false" style="display:none">1996</div>
+                <div data-year="1997" data-has-quarterly="false" data-full-year="false" style="display:none">1997</div>
+                <div data-year="1998" data-has-quarterly="false" data-full-year="false" style="display:none">1998</div>
+                <div data-year="1999" data-has-quarterly="false" data-full-year="false" style="display:none">1999</div>
+                <div data-year="2000" data-has-quarterly="false" data-full-year="false" style="display:none">2000</div>
+                <div data-year="2001" data-has-quarterly="false" data-full-year="false" style="display:none">2001</div>
+                <div data-year="2002" data-has-quarterly="false" data-full-year="false" style="display:none">2002</div>
+                <div data-year="2003" data-has-quarterly="false" data-full-year="false" style="display:none">2003</div>
+                <div data-year="2004" data-has-quarterly="false" data-full-year="false" style="display:none">2004</div>
+                <div data-year="2005" data-has-quarterly="false" data-full-year="false" style="display:none">2005</div>
+                <div data-year="2006" data-has-quarterly="false" data-full-year="false" style="display:none">2006</div>
+                <div data-year="2007" data-has-quarterly="false" data-full-year="false" style="display:none">2007</div>
+                <div data-year="2008" data-has-quarterly="false" data-full-year="false" style="display:none">2008</div>
+                <div data-year="2009" data-has-quarterly="false" data-full-year="false" style="display:none">2009</div>
+                <div data-year="2010" data-has-quarterly="false" data-full-year="false" style="display:none">2010</div>
+                <div data-year="2011" data-has-quarterly="false" data-full-year="false" style="display:none">2011</div>
+                <div data-year="2012" data-has-quarterly="false" data-full-year="false" style="display:none">2012</div>
+                <div data-year="2013" data-has-quarterly="false" data-full-year="false" style="display:none">2013</div>
+                <div data-year="2014" data-has-quarterly="false" data-full-year="false" style="display:none">2014</div>
+                <div data-year="2015" data-has-quarterly="false" data-full-year="false" style="display:none">2015</div>
+                <div data-year="2016" data-has-quarterly="false" data-full-year="false" style="display:inline-block">2016</div>
+        </div>
+
+        <div class="months" data-frequency="Monthly" style="display:block">
+            <div data-month="1">Jan</div>
+            <div data-month="2">Feb</div>
+            <div data-month="3">Mar</div>
+            <div data-month="4">Apr</div>
+            <div data-month="5">May</div>
+            <div data-month="6">Jun</div>
+            <div data-month="7">Jul</div>
+            <div data-month="8">Aug</div>
+            <div data-month="9">Sep</div>
+            <div data-month="10">Oct</div>
+            <div data-month="11">Nov</div>
+            <div data-month="12">Dec</div>
+        </div>
+        <div class="quarters" data-frequency="Quarterly" style="display:none">
+
+            <div data-quarter="1">Q1</div>
+            <div data-quarter="2">Q2</div>
+            <div data-quarter="3">Q3</div>
+            <div data-quarter="4">Q4</div>
+        </div>
+        <div class="seasons"  data-frequency="Seasonal"  style="display:none">
+            <div data-season="1">Spring</div>
+            <div data-season="2">Fall</div>
+        </div>
+    </div>
+    <div class="refresh-table">
+        <button>Apply</button>
+    </div>
+</div>
+
+
+<div class="data-widget">
+<form action="/hmip-pimh/en/TableMapChart/RenderTable" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#predefinedTable-data-area" id="PredefinedTableForm" method="post"></form>
+<div class="table-section">
+<form action="/hmip-pimh/en/CustomTable/Export" method="post">        <table class="CawdDataTable">
+        <thead>
+            <tr>    <td rowspan="1" data-sort-key="sgc_census_tract_cde">&nbsp;</td>
+    <th scope="col" colspan="2" data-sort-key="cell-1"><span>Bachelor</span></th>
+    <th scope="col" colspan="2" data-sort-key="cell-3"><span>1 Bedroom</span></th>
+    <th scope="col" colspan="2" data-sort-key="cell-5"><span>2 Bedroom</span></th>
+    <th scope="col" colspan="2" data-sort-key="cell-7"><span>3 Bedroom +</span></th>
+    <th scope="col" colspan="2" data-sort-key="cell-9"><span>Total</span></th>
+</tr>
+        </thead>
+         <tfoot>
+                <tr>    <th scope="row">St. John&#39;s</th>
+    <td class="numericalData">8.9</td>
+    <td class="">a </td>
+    <td class="numericalData">3.6</td>
+    <td class="">b </td>
+    <td class="numericalData">9.1</td>
+    <td class="">a </td>
+    <td class="numericalData">13.1</td>
+    <td class="">d </td>
+    <td class="numericalData">7.6</td>
+    <td class="">a </td>
+</tr>
+        </tfoot>
+        <tbody>
+            <tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="0">0001.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value=""></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value=""></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="1">0002.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="numericalData" data-field="cell-7" data-value="0.0">0.0</td>
+    <td class="" data-field="cell-8" data-value="a ">a </td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="2">0003.01</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="numericalData" data-field="cell-3" data-value="12.0">12.0</td>
+    <td class="" data-field="cell-4" data-value="a ">a </td>
+    <td class="numericalData" data-field="cell-5" data-value="9.1">9.1</td>
+    <td class="" data-field="cell-6" data-value="a ">a </td>
+    <td class="numericalData" data-field="cell-7" data-value="16.7">16.7</td>
+    <td class="" data-field="cell-8" data-value="a ">a </td>
+    <td class="numericalData" data-field="cell-9" data-value="11.3">11.3</td>
+    <td class="" data-field="cell-10" data-value="a ">a </td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="3">0003.02</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="numericalData" data-field="cell-9" data-value="5.1">5.1</td>
+    <td class="" data-field="cell-10" data-value="c ">c </td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="4">0004.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="numericalData" data-field="cell-3" data-value="7.0">7.0</td>
+    <td class="" data-field="cell-4" data-value="c ">c </td>
+    <td class="numericalData" data-field="cell-5" data-value="14.0">14.0</td>
+    <td class="" data-field="cell-6" data-value="a ">a </td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="numericalData" data-field="cell-9" data-value="12.3">12.3</td>
+    <td class="" data-field="cell-10" data-value="a ">a </td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="5">0005.01</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="numericalData" data-field="cell-3" data-value="0.0">0.0</td>
+    <td class="" data-field="cell-4" data-value="d ">d </td>
+    <td class="numericalData" data-field="cell-5" data-value="0.0">0.0</td>
+    <td class="" data-field="cell-6" data-value="d ">d </td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="6">0005.02</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="numericalData" data-field="cell-3" data-value="1.1">1.1</td>
+    <td class="" data-field="cell-4" data-value="a ">a </td>
+    <td class="numericalData" data-field="cell-5" data-value="11.8">11.8</td>
+    <td class="" data-field="cell-6" data-value="c ">c </td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="numericalData" data-field="cell-9" data-value="7.0">7.0</td>
+    <td class="" data-field="cell-10" data-value="b ">b </td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="7">0006.00</th>
+    <td class="numericalData" data-field="cell-1" data-value="11.6">11.6</td>
+    <td class="" data-field="cell-2" data-value="d ">d </td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="numericalData" data-field="cell-7" data-value="3.4">3.4</td>
+    <td class="" data-field="cell-8" data-value="d ">d </td>
+    <td class="numericalData" data-field="cell-9" data-value="5.3">5.3</td>
+    <td class="" data-field="cell-10" data-value="d ">d </td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="8">0007.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="numericalData" data-field="cell-9" data-value="4.6">4.6</td>
+    <td class="" data-field="cell-10" data-value="d ">d </td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="9">0008.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="10">0009.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="11">0010.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="numericalData" data-field="cell-3" data-value="0.0">0.0</td>
+    <td class="" data-field="cell-4" data-value="d ">d </td>
+    <td class="numericalData" data-field="cell-5" data-value="0.0">0.0</td>
+    <td class="" data-field="cell-6" data-value="d ">d </td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="numericalData" data-field="cell-9" data-value="0.0">0.0</td>
+    <td class="" data-field="cell-10" data-value="d ">d </td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="12">0011.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="numericalData" data-field="cell-3" data-value="0.0">0.0</td>
+    <td class="" data-field="cell-4" data-value="d ">d </td>
+    <td class="numericalData" data-field="cell-5" data-value="0.0">0.0</td>
+    <td class="" data-field="cell-6" data-value="d ">d </td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="13">0012.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value=""></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value=""></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="14">0013.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="15">0014.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="16">0015.01</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="numericalData" data-field="cell-3" data-value="0.9">0.9</td>
+    <td class="" data-field="cell-4" data-value="a ">a </td>
+    <td class="numericalData" data-field="cell-5" data-value="17.3">17.3</td>
+    <td class="" data-field="cell-6" data-value="a ">a </td>
+    <td class="numericalData" data-field="cell-7" data-value="16.7">16.7</td>
+    <td class="" data-field="cell-8" data-value="a ">a </td>
+    <td class="numericalData" data-field="cell-9" data-value="13.1">13.1</td>
+    <td class="" data-field="cell-10" data-value="a ">a </td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="17">0015.02</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="numericalData" data-field="cell-5" data-value="5.6">5.6</td>
+    <td class="" data-field="cell-6" data-value="a ">a </td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="numericalData" data-field="cell-9" data-value="5.6">5.6</td>
+    <td class="" data-field="cell-10" data-value="a ">a </td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="18">0015.03</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value=""></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="19">0015.04</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value=""></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="20">0016.01</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value=""></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="21">0016.02</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="22">0100.01</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="23">0100.03</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value=""></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="24">0100.04</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="25">0110.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value=""></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value=""></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="26">0170.01</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="27">0170.02</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value="**"></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="28">0171.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value=""></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="29">0172.05</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value=""></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value="**"></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="30">0200.02</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value=""></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value=""></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="31">0201.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value=""></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="32">0202.04</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value=""></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value=""></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="33">0300.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="numericalData" data-field="cell-5" data-value="0.0">0.0</td>
+    <td class="" data-field="cell-6" data-value="a ">a </td>
+    <td class="numericalData" data-field="cell-7" data-value="36.4">36.4</td>
+    <td class="" data-field="cell-8" data-value="a ">a </td>
+    <td class="numericalData" data-field="cell-9" data-value="20.1">20.1</td>
+    <td class="" data-field="cell-10" data-value="a ">a </td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="34">0301.01</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value=""></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value=""></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="35">0301.02</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value="**"></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value=""></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr><tr>    <th scope="row" class="first-cell" data-field="sgc_census_tract_cde" data-value="36">0302.00</th>
+    <td class="" data-field="cell-1" data-value="">**</td>
+    <td class="" data-field="cell-2" data-value=""></td>
+    <td class="" data-field="cell-3" data-value="">**</td>
+    <td class="" data-field="cell-4" data-value=""></td>
+    <td class="" data-field="cell-5" data-value="">**</td>
+    <td class="" data-field="cell-6" data-value="**"></td>
+    <td class="" data-field="cell-7" data-value="">**</td>
+    <td class="" data-field="cell-8" data-value=""></td>
+    <td class="" data-field="cell-9" data-value="">**</td>
+    <td class="" data-field="cell-10" data-value="**"></td>
+</tr>
+        </tbody>
+    </table>
+    <input type="hidden" name="exportType" id="exportType" value="pdf" />
+    <input type="hidden" name="title"  value="Vacancy Rates by Bedroom Type by Census Tract "/>
+</form></div>
+
+
+            <div class="table-notes">Notes:</div>
+        <ul>
+                <li>The following letter codes are used to indicate the reliability of the estimates: a - Excellent, b- Very good, c - Good, d - Fair (Use with Caution)</li>
+                <li>** Data suppressed to protect confidentiality or data not statistically reliable</li>
+                <li> - No units exist in the universe for this category</li>
+                <li>n/a: Not applicable</li>
+                <li>CMA, CA and CSD definitions are based on 2011 Census Geography Definitions</li>
+        </ul>
+</div>
+<div>
+    <div class="table-source">Source: <a href="/hmip-pimh/en/TableMapChart/RmsMethodology" target="_blank" class="newWindow">CMHC Rental Market Survey <span>(opens in new window)</span></a></div>
+</div>
+
+<input type="hidden" id="serialized-model" data-table-model="{&quot;AvailableTimePeriods&quot;:[{&quot;Year&quot;:1990,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 1990&quot;},{&quot;Year&quot;:1991,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 1991&quot;},{&quot;Year&quot;:1992,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 1992&quot;},{&quot;Year&quot;:1993,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 1993&quot;},{&quot;Year&quot;:1994,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 1994&quot;},{&quot;Year&quot;:1995,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 1995&quot;},{&quot;Year&quot;:1996,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 1996&quot;},{&quot;Year&quot;:1997,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 1997&quot;},{&quot;Year&quot;:1998,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 1998&quot;},{&quot;Year&quot;:1999,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 1999&quot;},{&quot;Year&quot;:2000,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2000&quot;},{&quot;Year&quot;:2001,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2001&quot;},{&quot;Year&quot;:2002,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2002&quot;},{&quot;Year&quot;:2003,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2003&quot;},{&quot;Year&quot;:2004,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2004&quot;},{&quot;Year&quot;:2005,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2005&quot;},{&quot;Year&quot;:2006,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2006&quot;},{&quot;Year&quot;:2007,&quot;Month&quot;:4,&quot;Quarter&quot;:2,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;April 2007&quot;},{&quot;Year&quot;:2007,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2007&quot;},{&quot;Year&quot;:2008,&quot;Month&quot;:4,&quot;Quarter&quot;:2,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;April 2008&quot;},{&quot;Year&quot;:2008,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2008&quot;},{&quot;Year&quot;:2009,&quot;Month&quot;:4,&quot;Quarter&quot;:2,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;April 2009&quot;},{&quot;Year&quot;:2009,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2009&quot;},{&quot;Year&quot;:2010,&quot;Month&quot;:4,&quot;Quarter&quot;:2,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;April 2010&quot;},{&quot;Year&quot;:2010,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2010&quot;},{&quot;Year&quot;:2011,&quot;Month&quot;:4,&quot;Quarter&quot;:2,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;April 2011&quot;},{&quot;Year&quot;:2011,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2011&quot;},{&quot;Year&quot;:2012,&quot;Month&quot;:4,&quot;Quarter&quot;:2,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;April 2012&quot;},{&quot;Year&quot;:2012,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2012&quot;},{&quot;Year&quot;:2013,&quot;Month&quot;:4,&quot;Quarter&quot;:2,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;April 2013&quot;},{&quot;Year&quot;:2013,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2013&quot;},{&quot;Year&quot;:2014,&quot;Month&quot;:4,&quot;Quarter&quot;:2,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;April 2014&quot;},{&quot;Year&quot;:2014,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2014&quot;},{&quot;Year&quot;:2015,&quot;Month&quot;:4,&quot;Quarter&quot;:2,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;April 2015&quot;},{&quot;Year&quot;:2015,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2015&quot;},{&quot;Year&quot;:2016,&quot;Month&quot;:10,&quot;Quarter&quot;:4,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2016&quot;}],&quot;AvailableFilters&quot;:[{&quot;Item1&quot;:&quot;dwelling_type_desc_en&quot;,&quot;Item2&quot;:&quot;Dwelling Type&quot;,&quot;Item3&quot;:[&quot;Row&quot;,&quot;Apartment&quot;,&quot;Row / Apartment&quot;]}],&quot;Table&quot;:null,&quot;TableId&quot;:&quot;2.1.1.6&quot;,&quot;GeographyId&quot;:&quot;1640&quot;,&quot;GeographyTypeId&quot;:3,&quot;BreakdownGeographyTypeId&quot;:7,&quot;DisplayAs&quot;:0,&quot;GeograghyName&quot;:&quot;St. John\u0027s&quot;,&quot;TableName&quot;:&quot;Vacancy Rates by Bedroom Type by Census Tract&quot;,&quot;ForTimePeriod&quot;:{&quot;Year&quot;:2016,&quot;Month&quot;:10,&quot;Quarter&quot;:null,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;October 2016&quot;},&quot;ToTimePeriod&quot;:{&quot;Year&quot;:null,&quot;Month&quot;:null,&quot;Quarter&quot;:null,&quot;Season&quot;:null,&quot;Caption&quot;:&quot;&quot;},&quot;IsTimeSeries&quot;:false,&quot;ChartType&quot;:0,&quot;AppliedFilters&quot;:[{&quot;Key&quot;:&quot;dwelling_type_desc_en&quot;,&quot;Value&quot;:&quot;Row / Apartment&quot;}],&quot;Ytd&quot;:false,&quot;Frequency&quot;:null,&quot;GeographyBreakdownFieldKey&quot;:&quot;historic_census_tract_geographic_layer_id&quot;,&quot;RowSortKey&quot;:null,&quot;ViewByTables&quot;:null,&quot;IsChartDisplayAvailable&quot;:false,&quot;IsMapDisplayAvailable&quot;:true,&quot;IsTableDisplayAvailable&quot;:true,&quot;TimePeriodCaption&quot;:&quot;October 2016&quot;,&quot;HasReportingFrequencies&quot;:false,&quot;DisableCumulative&quot;:false,&quot;DefaultDataField&quot;:&quot;vacancy_rate_pct&quot;,&quot;Footnotes&quot;:[],&quot;Notes&quot;:[&quot;The following letter codes are used to indicate the reliability of the estimates: a - Excellent, b- Very good, c - Good, d - Fair (Use with Caution)&quot;,&quot;** Data suppressed to protect confidentiality or data not statistically reliable&quot;,&quot; - No units exist in the universe for this category&quot;,&quot;n/a: Not applicable&quot;,&quot;CMA, CA and CSD definitions are based on 2011 Census Geography Definitions&quot;],&quot;Source&quot;:&quot;CMHC Rental Market Survey&quot;,&quot;MethodologyAction&quot;:&quot;RmsMethodology&quot;,&quot;Survey&quot;:&quot;Rms&quot;,&quot;DataSource&quot;:2,&quot;ShareToken&quot;:&quot;L2htaXAtcGltaC9lbi9UYWJsZU1hcENoYXJ0L1RhYmxlP1RhYmxlSWQ9Mi4xLjEuNiZHZW9ncmFwaHlJZD0xNjQwJkdlb2dyYXBoeVR5cGVJZD0zJkJyZWFrZG93bkdlb2dyYXBoeVR5cGVJZD03JkRpc3BsYXlBcz1UYWJsZSZHZW9ncmFnaHlOYW1lPVN0LiUyMEpvaG4ncyZZdGQ9RmFsc2UmRGVmYXVsdERhdGFGaWVsZD12YWNhbmN5X3JhdGVfcGN0JlN1cnZleT1SbXMmRm9yVGltZVBlcmlvZC5ZZWFyPTIwMTYmRm9yVGltZVBlcmlvZC5Nb250aD0xMA%3D%3D&quot;,&quot;SearchCriteria&quot;:null}" data-display="Table" />
+<script type="text/javascript">
+    //$(function () {
+    dojo.ready(function () {
+        window.model = new Function('return ' + $('#serialized-model').attr('data-table-model'))();
+        delete model.Table;
+
+        model.DisplayAs = $('#serialized-model').attr('data-display');
+        onPredefinedTableLoad(model);
+        window.isModelReady = true;
+        if (window.onModelReady) {
+            window.onModelReady();
+        }
+    });
+</script>
+
+
+
+
