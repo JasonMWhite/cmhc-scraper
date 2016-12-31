@@ -37,7 +37,7 @@ def test_mets_for_province_callback(mets_by_province):
     result = [x for x in spider.mets_for_province(res)]
     result = sorted(result, key=lambda req: (req.meta['met_id'], req.meta['data_type']))
 
-    assert len(result) == 25
+    assert len(result) / len(stats.StatsSpider.DATA_TYPES) == 5
     assert 'GeographyId=1640' in result[0].url
     assert 'GeographyId=1640' in result[1].url
     assert result[0].method == 'GET'
@@ -47,9 +47,10 @@ def test_mets_for_province_callback(mets_by_province):
         'province_code': 10,
         'met_id': '1640',
         'met_name': "St. John's",
-        'data_type': 'availability_rate',
+        'data_type': 'absorbed_units',
+        'dont_retry': True
     }
-    assert result[1].meta['data_type'] == 'average_rent'
+    assert result[1].meta['data_type'] == 'availability_rate'
 
 
 def test_data_availability_callback(availability_data):
