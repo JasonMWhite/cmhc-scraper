@@ -92,3 +92,4 @@ pip-selfcheck.json
 .ropeproject
 
 .idea
+share/
