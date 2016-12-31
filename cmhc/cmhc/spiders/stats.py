@@ -16,25 +16,24 @@ def province_codes():
 class StatsSpider(scrapy.Spider):
     name = "stats"
     allowed_domains = ["www03.cmhc-schl.gc.ca"]
-    mets_request_url = "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/Navigation/MetsByProvince/"
-    survey_zone_request_url = "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/Navigation/SurveyZonesAndCSDsByMet/"
-    data_url = "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/TableMatchingCriteria"
-    embedded_data_url = "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/RenderTable"
+    METS_REQUEST_URL = "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/Navigation/MetsByProvince/"
+    DATA_URL = "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/TableMatchingCriteria"
+    EMBEDDED_DATA_URL = "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/RenderTable"
 
     def __init__(self, *args, **kwargs):
         logger = logging.getLogger('scrapy.core.scraper')
         logger.setLevel(logging.WARNING)
         super().__init__(*args, **kwargs)
 
-    def form_request(self, province, code):
+    def initial_request(self, province, code):
         return scrapy.Request(
-            self.mets_request_url + str(code),
+            self.METS_REQUEST_URL + str(code),
             callback=self.mets_for_province,
             meta={'province': province, 'province_code': code}
         )
 
     def start_requests(self):
-        return [self.form_request(province, code)
+        return [self.initial_request(province, code)
                     for province, code in province_codes().items()]
 
     @staticmethod
@@ -45,13 +44,21 @@ class StatsSpider(scrapy.Spider):
         for node in cma:
             yield (node['data-id'], node.text)
 
-    def survey_zone_request(self, survey_id, name, meta):
-        meta['survey_zone_id'] = survey_id
-        meta['survey_zone_name'] = name
+    def vacancy_rate_request(self, met_id, met_name, meta):
+        params = parse.urlencode({
+            'GeographyType': 'MetropolitanMajorArea',
+            'GeographyId': met_id,
+            'CategoryLevel1': 'Primary Rental Market',
+            'CategoryLevel2': 'Vacancy Rate (%)',
+        })
+        meta['data_type'] = 'Vacancy Rate (%)'
+        meta['met_id'] = met_id
+        meta['met_name']= met_name
+
         return scrapy.Request(
-            self.survey_zone_request_url + str(survey_id),
-            callback=self.survey_zones_for_met,
-            meta=meta
+            self.DATA_URL + "?" + params,
+            callback=self.vacancy_data_availability,
+            meta=meta,
         )
 
     def mets_for_province(self, response):
@@ -61,42 +68,7 @@ class StatsSpider(scrapy.Spider):
             'province_code': response.meta['province_code'],
         }
 
-        return [self.survey_zone_request(survey_id, name, meta) for (survey_id, name) in data]
-
-    @staticmethod
-    def parse_survey_zone_data(body):
-        page = BeautifulSoup(body, 'html.parser')
-        surveys = page.find_all('a', **{'data-type': 'SurveyZone'})
-        for node in surveys:
-            yield (node['data-id'], node.text)
-
-    def vacancy_rate_request(self, survey_id, meta):
-        params = parse.urlencode({
-            'GeographyType': 'SurveyZone',
-            'GeographyId': survey_id,
-            'CategoryLevel1': 'Primary Rental Market',
-            'CategoryLevel2': 'Vacancy Rate (%)',
-            'ColumnField': 2,
-            'RowField': 23,
-        })
-        meta['data_type'] = 'Vacancy Rate (%)'
-
-        return scrapy.FormRequest(
-            self.data_url + "?" + params,
-            callback=self.vacancy_data_for_survey_zone,
-            meta=meta,
-        )
-
-    def survey_zones_for_met(self, response):
-        data = self.parse_survey_zone_data(response.body)
-        meta = {
-            'province': response.meta['province'],
-            'province_code': response.meta['province_code'],
-            'survey_zone_id': response.meta['survey_zone_id'],
-            'survey_zone_name': response.meta['survey_zone_name'],
-        }
-
-        return [self.vacancy_rate_request(survey_id, meta) for (survey_id, name) in data]
+        return [self.vacancy_rate_request(met_id, name, meta) for (met_id, name) in data]
 
     @staticmethod
     def vacancy_rate_available_periods(body):
@@ -105,7 +77,7 @@ class StatsSpider(scrapy.Spider):
         for availability in time_periods['AvailableTimePeriods']:
             yield (availability['Year'], availability['Month'])
 
-    def vacancy_data_for_survey_zone(self, response):
+    def vacancy_data_availability(self, response):
         available_periods = self.vacancy_rate_available_periods(response.body)
         data = {
             'AppliedFilters[0].Key': 'dwelling_type_desc_en',
@@ -117,8 +89,8 @@ class StatsSpider(scrapy.Spider):
             'ForTimePeriod.Quarter': '',
             'ForTimePeriod.Season': '',
             'Frequency': '',
-            'GeograghyName': response.meta['survey_zone_name'],
-            'GeographyId': response.meta['survey_zone_id'],
+            'GeograghyName': response.meta['met_name'],
+            'GeographyId': response.meta['met_id'],
             'GeographyTypeId': '3',
             'RowSortKey': '',
             'SearchCriteria': '',
@@ -130,8 +102,8 @@ class StatsSpider(scrapy.Spider):
         meta = {
             'province': response.meta['province'],
             'province_code': response.meta['province_code'],
-            'survey_zone_id': response.meta['survey_zone_id'],
-            'survey_zone_name': response.meta['survey_zone_name'],
+            'met_id': response.meta['met_id'],
+            'met_name': response.meta['met_name'],
             'data_type': response.meta['data_type'],
         }
 
@@ -154,7 +126,7 @@ class StatsSpider(scrapy.Spider):
             meta['month'] = month
 
             yield scrapy.Request(
-                self.embedded_data_url,
+                self.EMBEDDED_DATA_URL,
                 body=body,
                 headers=headers,
                 callback=self.parse_vacancy_data,
@@ -182,8 +154,6 @@ class StatsSpider(scrapy.Spider):
         for item in self.extract_vacancy_data(response.body):
             item['province'] = response.meta['province']
             item['province_code'] = response.meta['province_code']
-            item['survey_zone_id'] = response.meta['survey_zone_id']
-            item['survey_zone_name'] = response.meta['survey_zone_name']
             item['data_type'] = response.meta['data_type']
             item['year'] = response.meta['year']
             item['month'] = response.meta['month']
