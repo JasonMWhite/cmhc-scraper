@@ -286,7 +286,7 @@ def data():
 
 
 def test_parse_vacancy_data(data):
-    result = [x for x in StatsSpider.extract_vacancy_data(data)]
+    result = [x for x in StatsSpider.extract_data(data)]
     result = sorted(result, key=lambda d: d['name'])
     assert len(result) == 22
     assert result[0] == {

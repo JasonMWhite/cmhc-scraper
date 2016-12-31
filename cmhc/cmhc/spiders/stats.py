@@ -30,6 +30,63 @@ class StatsSpider(scrapy.Spider):
         'Accept-Language': 'en-US,en;q=0.8',
     }
 
+    DEFAULT_REQUEST_CONTENT = {
+        'BreakdownGeographyTypeId': '7',
+        'DataSource': '2',
+        'DisplayAs': 'Table',
+        'ForTimePeriod.Quarter': '',
+        'ForTimePeriod.Season': '',
+        'Frequency': '',
+        'GeographyTypeId': '3',
+        'RowSortKey': '',
+        'SearchCriteria': '',
+        'Survey': 'Rms',
+        'Ytd': 'false',
+    }
+
+    DATA_TYPES = {
+        'vacancy_rate': {
+            'CategoryLevel1': 'Primary Rental Market',
+            'CategoryLevel2': 'Vacancy Rate (%)',
+            'AppliedFilters[0].Key': 'dwelling_type_desc_en',
+            'AppliedFilters[0].Value': 'Row / Apartment',
+            'DefaultDataField': 'vacancy_rate_pct',
+            'TableId': '2.1.1.6',
+        },
+        'availability_rate': {
+            'CategoryLevel1': 'Primary Rental Market',
+            'CategoryLevel2': 'Availability Rate (%)',
+            'AppliedFilters[0].Key': 'dwelling_type_desc_en',
+            'AppliedFilters[0].Value': 'Row / Apartment',
+            'DefaultDataField': 'availability_rate_pct',
+            'TableId': '2.1.6.6',
+        },
+        'average_rent': {
+            'CategoryLevel1': 'Primary Rental Market',
+            'CategoryLevel2': 'Average Rent ($)',
+            'AppliedFilters[0].Key': 'dwelling_type_desc_en',
+            'AppliedFilters[0].Value': 'Row / Apartment',
+            'DefaultDataField': 'average_rent_amt',
+            'TableId': '2.1.11.6',
+        },
+        'median_rent': {
+            'CategoryLevel1': 'Primary Rental Market',
+            'CategoryLevel2': 'Median Rent ($)',
+            'AppliedFilters[0].Key': 'dwelling_type_desc_en',
+            'AppliedFilters[0].Value': 'Row / Apartment',
+            'DefaultDataField': 'rent_median_amt',
+            'TableId': '2.1.21.6',
+        },
+        'rental_universe': {
+            'CategoryLevel1': 'Primary Rental Market',
+            'CategoryLevel2': 'Rental Universe',
+            'AppliedFilters[0].Key': 'dwelling_type_desc_en',
+            'AppliedFilters[0].Value': 'Row / Apartment',
+            'DefaultDataField': 'universe_unit_cnt',
+            'TableId': '2.1.26.6',
+        }
+    }
+
     def __init__(self, *args, **kwargs):
         logger = logging.getLogger('scrapy.core.scraper')
         logger.setLevel(logging.WARNING)
@@ -55,20 +112,20 @@ class StatsSpider(scrapy.Spider):
         for node in cma:
             yield (node['data-id'], node.text)
 
-    def vacancy_rate_request(self, met_id, met_name, meta):
+    def data_availability_request(self, met_id, met_name, data_type, meta):
         params = parse.urlencode({
             'GeographyType': 'MetropolitanMajorArea',
             'GeographyId': met_id,
-            'CategoryLevel1': 'Primary Rental Market',
-            'CategoryLevel2': 'Vacancy Rate (%)',
+            'CategoryLevel1': self.DATA_TYPES[data_type]['CategoryLevel1'],
+            'CategoryLevel2': self.DATA_TYPES[data_type]['CategoryLevel2'],
         })
-        meta['data_type'] = 'Vacancy Rate (%)'
+        meta['data_type'] = data_type
         meta['met_id'] = met_id
         meta['met_name']= met_name
 
         return scrapy.Request(
             self.DATA_URL + "?" + params,
-            callback=self.vacancy_data_availability,
+            callback=self.data_availability,
             headers=self.HEADERS,
             meta=meta,
         )
@@ -81,43 +138,35 @@ class StatsSpider(scrapy.Spider):
         }
 
         for (met_id, name) in data:
-            yield self.vacancy_rate_request(met_id, name, meta)
+            for data_type in self.DATA_TYPES:
+                yield self.data_availability_request(met_id, name, data_type, meta)
 
     @staticmethod
-    def vacancy_rate_available_periods(body):
+    def available_periods(body):
         page = BeautifulSoup(body, 'html.parser')
         time_periods = json.loads(page.find('input', id="serialized-model")['data-table-model'])
         for availability in time_periods['AvailableTimePeriods']:
             yield (availability['Year'], availability['Month'])
 
-    def vacancy_data_availability(self, response):
-        available_periods = self.vacancy_rate_available_periods(response.body)
-        data = {
-            'AppliedFilters[0].Key': 'dwelling_type_desc_en',
-            'AppliedFilters[0].Value': 'Row / Apartment',
-            'BreakdownGeographyTypeId': '7',
-            'DataSource': '2',
-            'DefaultDataField': 'vacancy_rate_pct',
-            'DisplayAs': 'Table',
-            'ForTimePeriod.Quarter': '',
-            'ForTimePeriod.Season': '',
-            'Frequency': '',
-            'GeograghyName': response.meta['met_name'],
-            'GeographyId': response.meta['met_id'],
-            'GeographyTypeId': '3',
-            'RowSortKey': '',
-            'SearchCriteria': '',
-            'Survey': 'Rms',
-            'TableId': '2.1.1.6',
-            'Ytd': 'false',
-        }
+    def data_availability(self, response):
+        available_periods = self.available_periods(response.body)
+        data_type = response.meta['data_type']
+        data_fields = self.DATA_TYPES[data_type]
+
+        data = self.DEFAULT_REQUEST_CONTENT.copy()
+        data['AppliedFilters[0].Key'] = data_fields['AppliedFilters[0].Key']
+        data['AppliedFilters[0].Value'] = data_fields['AppliedFilters[0].Value']
+        data['DefaultDataField'] = data_fields['DefaultDataField']
+        data['TableId'] = data_fields['TableId']
+        data['GeograghyName'] = response.meta['met_name']
+        data['GeographyId'] = response.meta['met_id']
 
         meta = {
             'province': response.meta['province'],
             'province_code': response.meta['province_code'],
             'met_id': response.meta['met_id'],
             'met_name': response.meta['met_name'],
-            'data_type': response.meta['data_type'],
+            'data_type': data_type,
         }
 
         for (year, month) in available_periods:
@@ -131,12 +180,12 @@ class StatsSpider(scrapy.Spider):
                 self.EMBEDDED_DATA_URL,
                 body=body,
                 headers=self.HEADERS,
-                callback=self.parse_vacancy_data,
+                callback=self.parse_data,
                 meta=meta,
             )
 
     @staticmethod
-    def extract_vacancy_data(body):
+    def extract_data(body):
         page = BeautifulSoup(body, 'html.parser')
         table = page.find('table', **{'class': 'CawdDataTable'})
         head = table.find('thead')
@@ -152,8 +201,8 @@ class StatsSpider(scrapy.Spider):
             data['name'] = row.find('th').text
             yield data
 
-    def parse_vacancy_data(self, response):
-        for item in self.extract_vacancy_data(response.body):
+    def parse_data(self, response):
+        for item in self.extract_data(response.body):
             item['province'] = response.meta['province']
             item['province_code'] = response.meta['province_code']
             item['data_type'] = response.meta['data_type']
