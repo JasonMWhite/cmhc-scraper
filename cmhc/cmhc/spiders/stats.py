@@ -205,6 +205,8 @@ class StatsSpider(scrapy.Spider):
         for item in self.extract_data(response.body):
             item['province'] = response.meta['province']
             item['province_code'] = response.meta['province_code']
+            item['met_id'] = response.meta['met_id']
+            item['met_name'] = response.meta['met_name']
             item['data_type'] = response.meta['data_type']
             item['year'] = response.meta['year']
             item['month'] = response.meta['month']

@@ -124,6 +124,8 @@ def test_parse_data(detailed_data):
         'name': '0003.01',
         'province': 'Newfoundland and Labrador',
         'province_code': 10,
+        'met_name': "St. John's",
+        'met_id': '1640',
         'data_type': 'vacancy_rate',
         'year': 2016,
         'month': 10
